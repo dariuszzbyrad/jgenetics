@@ -27,6 +27,11 @@ public class Parameters {
 	 * Probability of gene mutation 
 	 */
 	private double mutationRate;
+	
+	/**
+	 * Probability of crossover
+	 */
+	private double crossoverRate;
 
 	/**
 	 * Set of values for the gene. For example:

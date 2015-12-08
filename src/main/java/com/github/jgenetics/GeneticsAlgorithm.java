@@ -37,7 +37,7 @@ public class GeneticsAlgorithm {
 		
 		while (iteration < parameters.getMaxIteration() || !population.isPopulationHomogeneous()) {
 			iteration++;
-			population = evolution.crossover(population, parameters.getSelectionType(), parameters.getCrossoverType());
+			population = evolution.crossover(population, parameters.getSelectionType(), parameters.getCrossoverType(), parameters.getCrossoverRate());
 			population = evolution.mutation(population, parameters.getMutationRate(), parameters.getEncodingAlphabet());
 			population = population.calculateFitnessFunction(fitnessFunction);
 			

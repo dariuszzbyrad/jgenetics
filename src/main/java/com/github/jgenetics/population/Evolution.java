@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import com.github.jgenetics.enums.Crossover;
 import com.github.jgenetics.enums.Selection;
 import com.github.jgenetics.exception.GeneticsException;
+import com.github.jgenetics.utils.Random;
 import com.github.jgenetics.utils.Utils;
 
 /**
@@ -29,6 +30,8 @@ public class Evolution {
 	 */
 	private static final double MAX_NORMALIZE_VALUE = 100;
 	
+	private Random rand = Random.getInstance();
+	
 	/**
 	 * Crossover population for a known selection chromosome type and crossover type.
 	 * The first step is chromosomes selection for hybridization. 
@@ -36,10 +39,11 @@ public class Evolution {
 	 * @param population Population for hybridization.
 	 * @param selectionType Type selection of chromosomes to cross. 
 	 * @param crossoverType Type crossover of chromosomes.
+	 * @param crossoverRate Probability of crossover.
 	 * @return Population with new chromosomes.
 	 * @throws GeneticsException 
 	 */
-	public Population crossover(Population population, Selection selectionType, Crossover crossoverType) throws GeneticsException {
+	public Population crossover(Population population, Selection selectionType, Crossover crossoverType, double crossoverRate) throws GeneticsException {
 		if (population.isPopulationHomogeneous()) {
 			throw new GeneticsException("Population is homogeneous");
 		}
@@ -50,7 +54,7 @@ public class Evolution {
 		switch (selectionType) {
 			case CAROUSEL:
 				List<Chromosome> candidates = getCandidatesForCarousel(population);
-				newChromosomes = crossoverListOfChromosomes(candidates, crossoverType);
+				newChromosomes = crossoverListOfChromosomes(candidates, crossoverType, crossoverRate);
 				break;
 		}
 
@@ -83,9 +87,10 @@ public class Evolution {
 	 * Crossing each pair of chromosomes from the list.
 	 * @param candidates List of chromosomes to crossing.
 	 * @param crossoverType Type crossover of chromosomes.
+	 * @param crossoverRate Probability of crossover.
 	 * @return New list of chromosomes after crossing.
 	 */
-	private List<Chromosome> crossoverListOfChromosomes(List<Chromosome> candidates, Crossover crossoverType) {
+	private List<Chromosome> crossoverListOfChromosomes(List<Chromosome> candidates, Crossover crossoverType, double crossoverRate) {
 		List<Chromosome> newChromosomes = new ArrayList<Chromosome>();
 		int numberOfChromosomes = candidates.size();
 		
@@ -93,10 +98,16 @@ public class Evolution {
 			Chromosome firstCandidate = candidates.get(i);
 			Chromosome secondCandidate = candidates.get(i+1);
 			
-			List<Chromosome> newPair = firstCandidate.crosover(secondCandidate, crossoverType);
-			
-			newChromosomes.add(newPair.get(0));
-			newChromosomes.add(newPair.get(1));
+			double randomRate = rand.nextDouble();
+			if (randomRate < crossoverRate) {
+				List<Chromosome> newPair = firstCandidate.crosover(secondCandidate, crossoverType);
+				
+				newChromosomes.add(newPair.get(0));
+				newChromosomes.add(newPair.get(1));
+			} else {
+				newChromosomes.add(firstCandidate);
+				newChromosomes.add(secondCandidate);
+			}
 		}
 		
 		if (newChromosomes.size() != numberOfChromosomes) {
