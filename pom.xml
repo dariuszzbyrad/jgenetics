@@ -12,14 +12,6 @@
 	<description>Library to simple use genetic algorithm in Java</description>
 	<url>http://maven.apache.org</url>
 
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
@@ -31,6 +23,27 @@
 		<apacheCommons.version>3.0</apacheCommons.version>
 		<log4j.version>1.2.17</log4j.version>
 	</properties>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Dariusz Zbyrad</name>
+			<email>dariusz.zbyrad.projects@gmail.com</email>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:dariuszzbyrad/jgenetics.git</connection>
+		<developerConnection>scm:git:git@github.com:dariuszzbyrad/jgenetics.git</developerConnection>
+		<url>dariuszzbyrad@github.com:dariuszzbyrad/jgenetics.git</url>
+	</scm>
 
 	<dependencies>
 		<!-- TESTS -->
