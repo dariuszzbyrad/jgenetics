@@ -3,6 +3,7 @@ package com.github.jgenetics.population;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,10 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.github.jgenetics.exception.GeneticsException;
-import com.github.jgenetics.model.PopulationStatistic;
-import com.github.jgenetics.population.Chromosome;
-import com.github.jgenetics.population.FitnessFunction;
-import com.github.jgenetics.population.Population;
 
 public class PopulationTest {
 	
@@ -109,7 +106,6 @@ public class PopulationTest {
 		
 		assertEquals(1, population.getChromosomes().get(0).getFitnessValue(), DEFAULT_DELTA);
 		assertEquals(0, population.getChromosomes().get(1).getFitnessValue(), DEFAULT_DELTA);
-		assertEquals(PopulationStatistic.EMPTY, population.getStatistic());
 	}
 	
 	@Test
@@ -158,31 +154,46 @@ public class PopulationTest {
 		assertFalse(population.isPopulationHomogeneous());
 	}
 	
-	@Test(expected = GeneticsException.class) 
-	public void validHomogeneousForEmptyPopulation() throws GeneticsException {
+	@Test
+	public void validHomogeneousForEmptyPopulation() {
 		List<Chromosome> chromosomes = new LinkedList<Chromosome>();
 		
 		Population population = new Population();
 		population.setChromosomes(chromosomes);
 		
-		population.isPopulationHomogeneous();
+		try {
+			population.isPopulationHomogeneous();
+			fail("Expected GeneticsException");
+		} catch (GeneticsException e) {
+			assertEquals("Population is empty", e.getMessage());
+		}
 	}
 	
-	@Test(expected = IllegalArgumentException.class)  
+	@Test
 	public void generatePopulationWithIncorrectSize() {
 		int populationSize = -1;
 		int sizeOfChromosome = 2;
 		String encodingType = "ABCD";
 		
-		Population.generate(populationSize, sizeOfChromosome, encodingType);
+		try {
+			Population.generate(populationSize, sizeOfChromosome, encodingType);;
+			fail("Expected IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			assertEquals("Invalid populationSize value", e.getMessage());
+		}
 	}
 	
-	@Test(expected = IllegalArgumentException.class) 
+	@Test
 	public void generatePopulationFromEmptyAlphabet() {
 		int populationSize = 1;
 		int sizeOfChromosome = 2;
 		String encodingType = "";
 		
-		Population.generate(populationSize, sizeOfChromosome, encodingType);
+		try {
+			Population.generate(populationSize, sizeOfChromosome, encodingType);;
+			fail("Expected IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			assertEquals("Invalid encodingType value", e.getMessage());
+		}
 	}
 }

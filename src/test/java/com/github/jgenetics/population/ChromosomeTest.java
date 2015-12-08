@@ -1,6 +1,7 @@
 package com.github.jgenetics.population;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -159,13 +160,18 @@ public class ChromosomeTest {
 		assertEquals(expectedSecondChromosome, newChromosomes.get(1));
 	}
 	
-	@Test(expected = IllegalArgumentException.class)  
+	@Test
 	public void invalidLengthOfChromosomesInCrossover() {
 		Crossover crossoverType = Crossover.OnePoint;
 		Chromosome firstChromosome = new Chromosome("ABCD");
 		Chromosome secondChromosome = new Chromosome("QWERTY");
 
-		firstChromosome.crosover(secondChromosome, crossoverType);
+		try {
+			firstChromosome.crosover(secondChromosome, crossoverType);
+			fail("Expected IllegalArgumentException");
+		} catch (IllegalArgumentException e) {
+			assertEquals("Invalid chromosomes length", e.getMessage());
+		}
 	}
 	
 	@Test
