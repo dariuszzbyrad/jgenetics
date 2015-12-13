@@ -44,8 +44,8 @@ public class Evolution {
 	 * @throws GeneticsException 
 	 */
 	public Population crossover(Population population, Selection selectionType, Crossover crossoverType, double crossoverRate) throws GeneticsException {
-		if (population.isPopulationHomogeneous()) {
-			throw new GeneticsException("Population is homogeneous");
+		if (population.isPopulationHomogeneous(1.0)) {
+			throw new GeneticsException("Population is homogeneous in 100%.");
 		}
 		
 		Population newPopulation = new Population();

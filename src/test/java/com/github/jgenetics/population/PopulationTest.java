@@ -127,7 +127,7 @@ public class PopulationTest {
 	}
 	
 	@Test
-	public void validIsHomogeneousPopulation() throws GeneticsException {
+	public void validIsHomogeneousPopulationWithoutCalculateFitnessFunction() {
 		Chromosome firstChromosome = new Chromosome("0010");
 		Chromosome secondChromosome = new Chromosome("0010");
 		List<Chromosome> chromosomes = new LinkedList<Chromosome>();
@@ -137,7 +137,27 @@ public class PopulationTest {
 		Population population = new Population();
 		population.setChromosomes(chromosomes);
 		
-		assertTrue(population.isPopulationHomogeneous());
+		try {
+			population.isPopulationHomogeneous(0.5);
+			fail("Expected GeneticsException");
+		} catch (GeneticsException e) {
+			assertEquals("The Method must be ivoked after calculate fitness function.", e.getMessage());
+		}
+	}
+	
+	@Test
+	public void validIsHomogeneousPopulation() throws GeneticsException {
+		Chromosome firstChromosome = new Chromosome("0010");
+		Chromosome secondChromosome = new Chromosome("0010");
+		List<Chromosome> chromosomes = new LinkedList<Chromosome>();
+		chromosomes.add(firstChromosome);
+		chromosomes.add(secondChromosome);
+		
+		Population population = new Population();
+		population.setChromosomes(chromosomes);
+		population = population.calculateFitnessFunction(numberOnesFunction);
+		
+		assertTrue(population.isPopulationHomogeneous(0.5));
 	}
 	
 	@Test
@@ -150,8 +170,9 @@ public class PopulationTest {
 		
 		Population population = new Population();
 		population.setChromosomes(chromosomes);
+		population = population.calculateFitnessFunction(numberOnesFunction);
 		
-		assertFalse(population.isPopulationHomogeneous());
+		assertFalse(population.isPopulationHomogeneous(0.51));
 	}
 	
 	@Test
@@ -162,7 +183,7 @@ public class PopulationTest {
 		population.setChromosomes(chromosomes);
 		
 		try {
-			population.isPopulationHomogeneous();
+			population.isPopulationHomogeneous(0.33);
 			fail("Expected GeneticsException");
 		} catch (GeneticsException e) {
 			assertEquals("Population is empty", e.getMessage());

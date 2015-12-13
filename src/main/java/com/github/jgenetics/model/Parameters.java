@@ -57,4 +57,14 @@ public class Parameters {
 	 * Max numbers of algorithm iteration
 	 */
 	private int maxIteration;
+	
+	/**
+	 * Save report to file after each iteration
+	 */
+	private boolean saveReport = false;
+	
+	/**
+	 * Min percent of population homogeneity for stop GA.
+	 */
+	private double percentHomogeneous = 1.0;
 }

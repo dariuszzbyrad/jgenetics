@@ -1,6 +1,7 @@
 package com.github.jgenetics.population;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.DoubleSummaryStatistics;
 import java.util.LinkedList;
 import java.util.List;
@@ -100,24 +101,26 @@ public class Population {
 	}
 
 	/**
-	 * Check is population homogeneus, it means that all chromosomes are the same genomes.
-	 * @return Is population homoneneus.s
+	 * Check is population homogeneous with specific percent. 
+	 * 
+	 * The Method must be ivoked after calculate fitness function.
+	 * 
+	 * @return true if specific percent of population is homogeneous
 	 * @throws GeneticsException Exception is throw when list of chromosomes is empty.
 	 */
-	public boolean isPopulationHomogeneous() throws GeneticsException {
+	public boolean isPopulationHomogeneous(double percent) throws GeneticsException {
 		if (chromosomes.isEmpty()) {
 			throw new GeneticsException("Population is empty");
 		}
 		
-		long numberOfIdentical = 1;
-		Chromosome pattern = chromosomes.get(0);
+		if (PopulationStatistic.EMPTY == statistic) {
+			throw new GeneticsException("The Method must be ivoked after calculate fitness function.");
+		}
 		
-		numberOfIdentical = chromosomes
-			.stream()
-			.filter(c -> pattern.equals(c))
-			.count();
+		List<Double> fitnessValues = chromosomes.stream().map(c -> c.getFitnessValue()).collect(Collectors.toList());
+		int numberOfSameFitnessValues = Collections.frequency(fitnessValues, theBestChromosome.getFitnessValue());
 		
-		return numberOfIdentical == chromosomes.size();
+		return (numberOfSameFitnessValues / chromosomes.size()) >= percent;
 	}
 	
 	/**

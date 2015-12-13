@@ -8,6 +8,7 @@ import com.github.jgenetics.population.Chromosome;
 import com.github.jgenetics.population.Evolution;
 import com.github.jgenetics.population.FitnessFunction;
 import com.github.jgenetics.population.Population;
+import com.github.jgenetics.utils.GlobalReport;
 
 /**
  * Main class for run genetic algorithm.
@@ -28,6 +29,7 @@ public class GeneticsAlgorithm {
 		Chromosome theBestChromosome = Chromosome.EMPTY;
 		int iteration = 0;
 		
+		GlobalReport report = new GlobalReport();
 		Evolution evolution = new Evolution();
 		
 		Population population = Population.generate(parameters.getPopulationSize(), parameters.getSizeOfChromosome(), parameters.getEncodingAlphabet());
@@ -35,7 +37,7 @@ public class GeneticsAlgorithm {
 		theBestChromosome = population.getTheBestChromosome();
 		logger.debug("Iteration #" + iteration + ": " + population);
 		
-		while (iteration < parameters.getMaxIteration() || !population.isPopulationHomogeneous()) {
+		while (iteration < parameters.getMaxIteration() && !population.isPopulationHomogeneous(parameters.getPercentHomogeneous())) {
 			iteration++;
 			population = evolution.crossover(population, parameters.getSelectionType(), parameters.getCrossoverType(), parameters.getCrossoverRate());
 			population = evolution.mutation(population, parameters.getMutationRate(), parameters.getEncodingAlphabet());
@@ -43,6 +45,14 @@ public class GeneticsAlgorithm {
 			
 			if (population.getTheBestChromosome().getFitnessValue() > theBestChromosome.getFitnessValue()) {
 				theBestChromosome = population.getTheBestChromosome();
+			}
+			
+			if (parameters.isSaveReport()) {
+				report.updateGlobalReport(
+						iteration,
+						population.getStatistic().getMinFitnessValue(), 
+						population.getStatistic().getAvgFitnessValue(), 
+						population.getStatistic().getMaxFitnessValue());
 			}
 			
 			logger.debug("Iteration #" + iteration + ": " + population);
