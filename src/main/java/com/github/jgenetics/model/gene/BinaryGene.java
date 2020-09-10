@@ -1,4 +1,4 @@
-package com.github.jgenetics.model;
+package com.github.jgenetics.model.gene;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -8,15 +8,11 @@ public final class BinaryGene implements Gene<Boolean> {
 
     private final Boolean value;
 
-    public static boolean random() {
-        return Math.random() < 0.5;
+    public static BinaryGene random() {
+        return new BinaryGene(Math.random() < 0.5);
     }
 
     public Boolean getValue() {
         return value;
-    }
-
-    public static Gene<Boolean> fromValue(Boolean value) {
-        return new BinaryGene(value);
     }
 }

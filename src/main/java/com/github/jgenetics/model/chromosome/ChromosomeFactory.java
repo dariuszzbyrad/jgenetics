@@ -1,11 +1,11 @@
-package com.github.jgenetics.model;
+package com.github.jgenetics.model.chromosome;
 
-public class ChomosomeFactory {
+public class ChromosomeFactory {
 
-    public Chromosome randomChromosome(ChromosomeType type) {
+    public Chromosome randomChromosome(ChromosomeType type, int length) {
         switch (type) {
             case BINARY:
-                return BinaryChromosome.random();
+                return BinaryChromosome.random(length);
             case MULTIPLE_FLOAT:
             case SINGLE_FLOAT:
                 throw new UnsupportedOperationException("Not yet implemented");
