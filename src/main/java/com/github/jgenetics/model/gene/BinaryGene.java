@@ -4,9 +4,9 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public final class BinaryGene implements Gene<Boolean> {
+public class BinaryGene implements Gene<Boolean> {
 
-    private final Boolean value;
+    private Boolean value;
 
     public static BinaryGene random() {
         return new BinaryGene(Math.random() < 0.5);
@@ -14,5 +14,9 @@ public final class BinaryGene implements Gene<Boolean> {
 
     public Boolean getValue() {
         return value;
+    }
+
+    public void switchToOppositeValue() {
+        value = !value;
     }
 }
